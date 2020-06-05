@@ -1,0 +1,33 @@
+<form class="card" [formGroup]="form" (ngSubmit)="submit()">
+  <h2>Administrator login</h2>
+  <div class="form-control"
+       [ngClass]="{invalid: isEmailInvalid}"
+  >
+    <label for="email">Email</label>
+    <input id="email" type="email" formControlName="email">
+    <div *ngIf="isEmailInvalid"
+         class="validation"
+    >
+      <small>
+        Email ivalid!
+      </small>
+    </div>
+  </div>
+  <div [ngClass]="{invalid: isPasswordInvalid}"
+       class="form-control"
+  >
+    <label for="password">Password</label>
+    <input id="password" type="password" formControlName="password">
+    <div *ngIf="isPasswordInvalid"
+         class="validation"
+    >
+      <small>
+        Password must have {{passwordMinLength}} - {{passwordMaxLength}} symbol lengths!
+      </small>
+    </div>
+  </div>
+  <button class="btn btn-primary"
+          [disabled]="form.invalid"
+  >Login
+  </button>
+</form>
