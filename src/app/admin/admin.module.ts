@@ -8,9 +8,9 @@ import {EditPageComponent} from './edit-page/edit-page.component';
 import {AdminRoutingModule} from "./admin-routing.module";
 import {DashboardPageComponent} from './dashboard-page/dashboard-page.component';
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
-import {AuthService} from "./services/auth.service";
-import {SharedModule} from "./shared/shared.module";
 
+import {AuthGuard} from "./services/auth.guard";
+import {SharedModule} from "../shared/shared.module";
 
 @NgModule({
   declarations: [
@@ -28,7 +28,9 @@ import {SharedModule} from "./shared/shared.module";
     SharedModule
   ],
   exports: [RouterModule],
-  providers: [AuthService]
+  providers: [
+    AuthGuard
+  ]
 })
 export class AdminModule {
 }

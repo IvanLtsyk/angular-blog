@@ -1,9 +1,10 @@
 import {Injectable} from '@angular/core';
-import {HttpClient} from "@angular/common/http";
+import {HttpClient, HttpErrorResponse} from "@angular/common/http";
 import {FbAuthResponse, User} from "../../shared/interfaces";
-import {Observable} from "rxjs";
+import {Observable, Subject, throwError} from "rxjs";
 import {environment} from "../../../environments/environment";
-import {tap} from "rxjs/operators";
+import {catchError, tap} from "rxjs/operators";
+import {FbErrorCodeEnum} from "../../shared/enumes";
 
 const enum storageItem {
   fbToken = "fbToken",
@@ -12,6 +13,10 @@ const enum storageItem {
 
 @Injectable()
 export class AuthService {
+
+  error$ = new Subject();
+  constructor(private http: HttpClient) {
+  }
 
   get token(): string {
     const expDate = new Date(localStorage.getItem(storageItem.expiresTokenDate));
@@ -23,13 +28,14 @@ export class AuthService {
     return localStorage.getItem(storageItem.fbToken);
   };
 
-  constructor(private http: HttpClient) {
-  }
-
   logIn(user: User): Observable<any> {
     return this.http.post(`https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${environment.apiKey}`, user)
       .pipe(
-        tap(this.setToken)
+        tap(this.setToken),
+        catchError((err: HttpErrorResponse) => {
+          this.error$.next(FbErrorCodeEnum[err.error.error.message]);
+          return throwError(err)
+        })
       )
   }
 
@@ -46,9 +52,10 @@ export class AuthService {
       localStorage.clear();
       return;
     }
-    console.log(response)
+    console.log(response);
     const expDate = new Date(new Date().getTime() + Number(response.expiresIn) * 1000);
     localStorage.setItem(storageItem.fbToken, response.idToken);
     localStorage.setItem(storageItem.expiresTokenDate, expDate.toString());
   }
+
 }

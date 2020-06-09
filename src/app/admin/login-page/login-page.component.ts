@@ -1,8 +1,9 @@
 import {Component, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {User} from "../../shared/interfaces";
-import {AuthService} from "../services/auth.service";
+
 import {Router} from "@angular/router";
+import {AuthService} from "../../shared/services/auth.service";
 
 @Component({
   selector: 'app-login-page',
@@ -13,10 +14,12 @@ export class LoginPageComponent implements OnInit {
 
   readonly passwordMinLength = 3;
   readonly passwordMaxLength = 20;
-  constructor(private autService: AuthService, private router: Router) {
+
+  constructor(public autService: AuthService, private router: Router) {
   }
 
   form: FormGroup;
+  isSubmitted: boolean = false;
 
   get emailCtrl(): FormControl {
     return this.form.get('email') as FormControl
@@ -54,17 +57,21 @@ export class LoginPageComponent implements OnInit {
     if (this.form.invalid) {
       return;
     }
-    const { password, email, } = this.form.value;
+    const {password, email,} = this.form.value;
     const user: User = {
       password,
       email,
       returnSecureToken: true,
     };
     console.log(user);
-
-    this.autService.logIn(user).subscribe(() => {
-      this.form.reset();
-      this.router.navigate(['/admin/dashboard'])
-    })
+    this.isSubmitted = true;
+    this.autService.logIn(user)
+      .subscribe(() => {
+        this.form.reset();
+        this.router.navigate(['/admin/dashboard']);
+        this.isSubmitted = false;
+      }, () => {
+        this.isSubmitted = false;
+      })
   }
 }
