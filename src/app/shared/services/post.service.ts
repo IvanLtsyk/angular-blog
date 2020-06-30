@@ -21,4 +21,41 @@ export class PostService {
       )
   }
 
+  getAll(): Observable<Post[]> {
+    return this.http.get(`${environment.fbDbUrl}/posts.json`)
+      .pipe(
+        map((response: { [key: string]: any }) => (
+            Object.keys(response)
+              .map(key => ({
+                  ...response[key],
+                  id: key,
+                  date: new Date(response[key].date)
+                })
+              )
+          )
+        )
+      )
+  }
+
+  delete(id: string): Observable<void> {
+    return this.http.delete<void>(`${environment.fbDbUrl}/posts/${id}.json`)
+  }
+
+  getBayId(id: string): Observable<Post> {
+    console.log(id);
+    return this.http.get(`${environment.fbDbUrl}/posts/${id}.json`)
+      .pipe(
+        map((post: Post) => {
+          return {
+            ...post,
+            id,
+            date: new Date(post.date)
+          }
+        })
+      )
+  }
+
+  update(post: Post): Observable<Post> {
+    return this.http.patch<Post>(`${environment.fbDbUrl}/posts/${post.id}.json`, post)
+  }
 }

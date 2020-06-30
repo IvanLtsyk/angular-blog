@@ -2,16 +2,19 @@ import {Component, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {Post} from "../../shared/interfaces";
 import {PostService} from "../../shared/services/post.service";
+import {DestroySub} from "../shared/DestroySub";
+import {takeUntil} from "rxjs/operators";
 
 @Component({
   selector: 'app-create-page',
   templateUrl: './create-page.component.html',
   styleUrls: ['./create-page.component.scss']
 })
-export class CreatePageComponent implements OnInit {
+export class CreatePageComponent extends DestroySub {
   form: FormGroup;
 
   constructor(private postService: PostService) {
+    super();
     this.form = new FormGroup({
       title: new FormControl("", Validators.required),
       author: new FormControl("", Validators.required),
@@ -31,8 +34,6 @@ export class CreatePageComponent implements OnInit {
     return this.form.get("text") as FormControl
   }
 
-  ngOnInit(): void {
-  }
 
   isTitleInvalid() {
     return this.titleCtrl.invalid && this.titleCtrl.touched;
@@ -59,7 +60,9 @@ export class CreatePageComponent implements OnInit {
       date: new Date()
     };
 
-    this.postService.crete(post).subscribe(m => {
+    this.postService.crete(post)
+      .pipe(takeUntil(this.destroy))
+      .subscribe(m => {
       this.form.reset()
     })
   }

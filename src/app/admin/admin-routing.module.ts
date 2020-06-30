@@ -1,5 +1,5 @@
 import {NgModule} from '@angular/core';
-import {RouterModule, Routes} from "@angular/router";
+import {RouterModule, Routes, } from "@angular/router";
 import {AdminLayoutComponent} from "./shared/admin-layout/admin-layout.component";
 import {LoginPageComponent} from "./login-page/login-page.component";
 import {DashboardPageComponent} from "./dashboard-page/dashboard-page.component";

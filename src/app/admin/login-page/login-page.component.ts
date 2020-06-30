@@ -4,18 +4,21 @@ import {User} from "../../shared/interfaces";
 
 import {Router} from "@angular/router";
 import {AuthService} from "../../shared/services/auth.service";
+import {DestroySub} from "../shared/DestroySub";
+import {takeUntil} from "rxjs/operators";
 
 @Component({
   selector: 'app-login-page',
   templateUrl: './login-page.component.html',
   styleUrls: ['./login-page.component.scss']
 })
-export class LoginPageComponent implements OnInit {
+export class LoginPageComponent extends DestroySub implements OnInit {
 
   readonly passwordMinLength = 3;
   readonly passwordMaxLength = 20;
 
   constructor(public autService: AuthService, private router: Router) {
+    super();
   }
 
   form: FormGroup;
@@ -66,6 +69,7 @@ export class LoginPageComponent implements OnInit {
     console.log(user);
     this.isSubmitted = true;
     this.autService.logIn(user)
+      .pipe(takeUntil(this.destroy))
       .subscribe(() => {
         this.form.reset();
         this.router.navigate(['/admin/dashboard']);
