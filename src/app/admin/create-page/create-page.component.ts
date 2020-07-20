@@ -4,6 +4,7 @@ import {Post} from "../../shared/interfaces";
 import {PostService} from "../../shared/services/post.service";
 import {DestroySub} from "../shared/DestroySub";
 import {takeUntil} from "rxjs/operators";
+import {AlertService} from "../services/AlertService";
 
 @Component({
   selector: 'app-create-page',
@@ -13,7 +14,7 @@ import {takeUntil} from "rxjs/operators";
 export class CreatePageComponent extends DestroySub {
   form: FormGroup;
 
-  constructor(private postService: PostService) {
+  constructor(private postService: PostService, private alertService: AlertService) {
     super();
     this.form = new FormGroup({
       title: new FormControl("", Validators.required),
@@ -63,7 +64,8 @@ export class CreatePageComponent extends DestroySub {
     this.postService.crete(post)
       .pipe(takeUntil(this.destroy))
       .subscribe(m => {
-      this.form.reset()
+      this.form.reset();
+      this.alertService.success("Created post!")
     })
   }
 

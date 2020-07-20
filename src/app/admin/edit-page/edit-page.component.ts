@@ -5,6 +5,7 @@ import {switchMap, takeUntil} from "rxjs/operators";
 import {Post} from "../../shared/interfaces";
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {DestroySub} from "../shared/DestroySub";
+import {AlertService} from "../services/AlertService";
 
 @Component({
   selector: 'app-edit-page',
@@ -14,7 +15,8 @@ import {DestroySub} from "../shared/DestroySub";
 export class EditPageComponent extends DestroySub implements OnInit {
 
   constructor(private router: ActivatedRoute,
-              private postService: PostService) {
+              private postService: PostService,
+              private alertService: AlertService) {
     super()
   }
 
@@ -71,9 +73,10 @@ export class EditPageComponent extends DestroySub implements OnInit {
       title: this.form.value.title
     }).pipe(takeUntil(this.destroy))
       .subscribe(() => {
-      this.isLoading = false;
-      this.loadData()
-    })
+        this.alertService.success("Updated post!");
+        this.isLoading = false;
+        this.loadData();
+      })
   }
 
 

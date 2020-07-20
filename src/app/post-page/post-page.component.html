@@ -1,16 +1,22 @@
-<div class="post">
-  <div class="header">
-    <h1>Post title</h1>
-    <button routerLink="/" class="btn btn-link">Home page</button>
+<div *ngIf="post$|async as post; else loading">
+
+
+  <div class="post">
+    <div class="header">
+      <h1>{{post.title}}</h1>
+      <button routerLink="/" class="btn btn-link">Home page</button>
+    </div>
+    <div class="info">
+      <strong>{{post.author}}</strong>
+      <small>{{post.date|date: "medium"}}</small>
+    </div>
+    <div>
+      <quill-view-html content="post.text"></quill-view-html>
+    </div>
   </div>
-  <div class="info">
-    <strong>Autor</strong>
-    <small>222/22/2</small>
-  </div>
-  <div>
-    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ad culpa, libero nisi perferendis placeat repellendus. Aliquid amet aspernatur atque beatae commodi debitis dolorum eius enim eum, facilis impedit iusto minus nisi non numquam omnis pariatur provident quam quos reiciendis suscipit vel veritatis vitae voluptate, voluptatem! Debitis doloremque optio ullam vitae?</p>
-    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ad culpa, libero nisi perferendis placeat repellendus. Aliquid amet aspernatur atque beatae commodi debitis dolorum eius enim eum, facilis impedit iusto minus nisi non numquam omnis pariatur provident quam quos reiciendis suscipit vel veritatis vitae voluptate, voluptatem! Debitis doloremque optio ullam vitae?</p>
-    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ad culpa, libero nisi perferendis placeat repellendus. Aliquid amet aspernatur atque beatae commodi debitis dolorum eius enim eum, facilis impedit iusto minus nisi non numquam omnis pariatur provident quam quos reiciendis suscipit vel veritatis vitae voluptate, voluptatem! Debitis doloremque optio ullam vitae?</p>
-    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ad culpa, libero nisi perferendis placeat repellendus. Aliquid amet aspernatur atque beatae commodi debitis dolorum eius enim eum, facilis impedit iusto minus nisi non numquam omnis pariatur provident quam quos reiciendis suscipit vel veritatis vitae voluptate, voluptatem! Debitis doloremque optio ullam vitae?</p>
-  </div>
+
 </div>
+
+<ng-template #loading>
+  ...loading
+</ng-template>

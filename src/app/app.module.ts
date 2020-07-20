@@ -11,6 +11,8 @@ import {SharedModule} from "./shared/shared.module";
 import {HTTP_INTERCEPTORS} from "@angular/common/http";
 import {AuthInterceptor} from "./shared/auth.interceptor";
 import {AuthService} from "./shared/services/auth.service";
+import { ServiceWorkerModule } from '@angular/service-worker';
+import { environment } from '../environments/environment';
 
 const INTERCEPTOR_PROV: Provider = {
   provide: HTTP_INTERCEPTORS,
@@ -30,6 +32,7 @@ const INTERCEPTOR_PROV: Provider = {
     BrowserModule,
     AppRoutingModule,
     SharedModule,
+    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
   ],
   providers: [
     AuthService,

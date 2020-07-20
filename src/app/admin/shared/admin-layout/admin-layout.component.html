@@ -2,6 +2,7 @@
    <h1>
      <a routerLink="/">Angular admin</a>
    </h1>
+  <app-alert></app-alert>
   <ul *ngIf="authService.isAuthenticated()">
     <li routerLinkActive="active">
       <a routerLink="dashboard">Home page</a>
